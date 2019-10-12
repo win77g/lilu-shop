@@ -204,7 +204,7 @@ def category_filter(request):
      print(prod_filter)
      # обьеденяем словарики
      z = list(prod_filter)
-     # получаем словари с повторение больше одного совпадения
+     # получаем словари с повторение больше двух совпадений
      q = get_repit_items(z)
      print(2)
      print(q)
@@ -213,6 +213,11 @@ def category_filter(request):
      if q:
        w = list(unique_everseen( q , key= operator.itemgetter('product_id') ))
      else:
+         # получаем словари с повторение больше одного совпадений
+       s = get_repit_items_two(z)
+       w = list(unique_everseen( s , key= operator.itemgetter('product_id') ))
+     if not w:
+       # если ввели в поиск одно значение
        w = list(unique_everseen( z , key= operator.itemgetter('product_id') ))
      print(3)
      print(w)
@@ -446,7 +451,7 @@ def product_detail(request,slug):
             raise Http404("Такойго продукта несушествует")
     return render(request,'product_detail.html',context={'product':product,'gallery':gallery})
 
-
+# больше двух совпадений
 def get_repit_items(z, key="product_id"):
     # Count how many times each key occurs.
     key_count = collections.defaultdict(lambda: 0)
@@ -455,12 +460,12 @@ def get_repit_items(z, key="product_id"):
     # Now return a list of only those dicts with a unique key.
     #Еси нужно отсеить повторяющиеся ==1 , Еси нужно повторяющиеся > 1
     return [d for d in z if key_count[d[key]] > 2]
-
-def get_unique_items(q, key="product_id"):
+# больше одного совпадений
+def get_repit_items_two(q, key="product_id"):
     # Count how many times each key occurs.
     key_count = collections.defaultdict(lambda: 0)
     for d in q:
         key_count[d[key]] += 1
     # Now return a list of only those dicts with a unique key.
     #Еси нужно отсеить повторяющиеся ==1 , Еси нужно повторяющиеся > 1
-    return [d for d in q if key_count[d[key]] == 1]
+    return [d for d in q if key_count[d[key]] > 1]
