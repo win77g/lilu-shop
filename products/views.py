@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from products.models import *
 from filters.models import *
+from django.db.models import Q
 from django.http import Http404,HttpResponseRedirect
 from django.core.paginator import Paginator
 from snowpenguin.django.recaptcha2.fields import ReCaptchaField
@@ -166,8 +167,10 @@ def category_filter(request):
      request.session['deep'] = deep
      width = request.POST.getlist("width")
      request.session['width'] = width
+     # print(height)
      if height:
          height = height[0]
+     # print(height)
      if deep:
          deep = deep[0]
      if width:
@@ -186,24 +189,33 @@ def category_filter(request):
      filters_deep = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Глубина').values()
      filters_width = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Ширина').values()
      # filters = FilterSelect.objects.all().values()
-     cat = FilterCategory.objects.all().values()
-     pr = ProductFilter.objects.all().values('product','filter_category','values')
+     # cat = FilterCategory.objects.all().values()
+     pr = ProductFilter.objects.all().values()
+     print(pr)
      change_sort = ''
      # categorys = Category.objects.get(slug = slug)
 
      # prod = Product.objects.filter(is_active=True,  attributes = data)
-     prod_id_filter_height = ProductFilter.objects.filter(filter_category = 'Высота', values = height).values()
-     prod_id_filter_deep = ProductFilter.objects.filter(filter_category = 'Глубина', values = deep).values()
-     prod_id_filter_width = ProductFilter.objects.filter(filter_category = 'Ширина', values = width).values()
+     # prod_id_filter_height = ProductFilter.objects.filter(filter_category = 'Высота', values = height).values()
+     # prod_id_filter_deep = ProductFilter.objects.filter(filter_category = 'Глубина', values = deep).values()
+     # prod_id_filter_width = ProductFilter.objects.filter(filter_category = 'Ширина', values = width).values()
+     prod_filter = ProductFilter.objects.filter(Q(filter_category = 'Высота', values = height)|Q(filter_category = 'Глубина', values = deep)|Q(filter_category = 'Ширина', values = width)).values()
+     print(1)
+     print(prod_filter)
      # обьеденяем словарики
-     z = list(chain(prod_id_filter_height, prod_id_filter_deep, prod_id_filter_width))
+     z = list(prod_filter)
      # получаем словари с повторение больше одного совпадения
      q = get_repit_items(z)
+     print(2)
+     print(q)
      # выделяем уникальные словарики по product_id
+     w=[]
      if q:
        w = list(unique_everseen( q , key= operator.itemgetter('product_id') ))
      else:
        w = list(unique_everseen( z , key= operator.itemgetter('product_id') ))
+     print(3)
+     print(w)
      d =[]
      for item in w:
          if (item['product_id']):
@@ -442,7 +454,7 @@ def get_repit_items(z, key="product_id"):
         key_count[d[key]] += 1
     # Now return a list of only those dicts with a unique key.
     #Еси нужно отсеить повторяющиеся ==1 , Еси нужно повторяющиеся > 1
-    return [d for d in z if key_count[d[key]] > 1]
+    return [d for d in z if key_count[d[key]] > 2]
 
 def get_unique_items(q, key="product_id"):
     # Count how many times each key occurs.

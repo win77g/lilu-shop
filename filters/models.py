@@ -45,6 +45,7 @@ class ProductFilter(models.Model):
     product = models.ForeignKey('products.Product',on_delete=models.CASCADE,related_name='filterproducts',null=True,verbose_name ='Product')
     filter_category = models.ForeignKey(FilterCategory,on_delete=models.CASCADE,null=True,related_name='filter_select_product',verbose_name ='Filter Category',to_field='name')
     values = models.ForeignKey(FilterSelect,on_delete=models.CASCADE,related_name='filtervalues',null=True,blank=True,verbose_name ='Values',to_field='name')
+    # values = models.ManyToManyField(FilterSelect,related_name='filtervalues',blank=True,verbose_name ='Values')
     def __str__(self):
         return str(self.product)
 
