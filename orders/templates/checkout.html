@@ -1,0 +1,129 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<section class="breadcrumb breadcrumb_bg">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="breadcrumb_iner">
+            <div class="breadcrumb_iner_item">
+              <i><h2>Оформление заказа</h2></i>
+              <i><p><a href="/">Главная</a> <span>/</span> Оформление заказа</p></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- breadcrumb start-->
+
+  <!--================Checkout Area =================-->
+  <section class="checkout_area padding_top">
+    <div class="container">
+
+      <div class="billing_details">
+        <div class="row">
+          <div class="col-lg-8">
+            <h3>Billing Details</h3>
+            <form class="row contact_form"  method="post" >{% csrf_token %}
+              <div class="col-md-6 form-group p_star">
+               <!-- <label>Фамилия</label> -->
+                <span class="form-error">{{ form.name.errors }}</span>
+
+                 <input type="text" name="{{ form.surname.html_name }}" class="form-control"
+                                    value = "{{ request.POST.surname }}" placeholder="Фамилия">
+<!--                                    <span class="placeholder" data-placeholder="Фамилия"></span>-->
+
+              </div>
+              <div class="col-md-6 form-group p_star">
+
+                 <span class="form-error">{{ form.name.errors }}</span>
+                   {% if user.is_authenticated %}
+                  <input type="text" name="{{ form.name.html_name }}" class="form-control"
+                                     value = "{{ request.POST.name }}" placeholder="Имя">
+<!--                                     <span class="placeholder" data-placeholder="Имя"></span>-->
+                     {% else %}
+                  <input type="text" name="{{ form.name.html_name }}" class="form-control"
+                                     value = "{{ request.POST.name }}">
+<!--                                     <span class="placeholder" data-placeholder="Имя"></span>-->
+                     {% endif %}
+              </div>
+
+              <div class="col-md-6 form-group p_star">
+
+                  <span class="form-error">{{ form.phone.errors }}</span>
+                    <input type="text" name="{{ form.phone.html_name }}" class="form-control"
+                                        value = "{{ request.POST.phone }}" placeholder="Телефон">
+<!--                  <span class="placeholder" data-placeholder="Телефон"></span>-->
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <span class="form-error">{{ form.email.errors }}</span>
+                  <input type="text" name="{{ form.email.html_name }}" class="form-control"
+                      value = "{{ request.POST.email }}" placeholder="Email Address">
+<!--                <span class="placeholder" data-placeholder="Email Address"></span>-->
+              </div>
+
+
+
+<!--              <div class="col-md-12 form-group">-->
+<!--                <div class="creat_account">-->
+<!--                  <h3>Адресс доставки</h3>-->
+<!--                </div>-->
+<!--              </div>-->
+                <div class="col-md-12 form-group p_star">
+                <input type="text" name="{{ form.city.html_name }}" class="form-control"
+                      value = "{{ request.POST.city }}" placeholder="Город" >
+
+                  </div>
+                  <div class="col-md-12 form-group p_star">
+                <input type="text" name="{{ form.street.html_name }}" class="form-control"
+                      value = "{{ request.POST.street }}" placeholder="Улица / номер дома" >
+                  </div>
+                <div class="col-md-12 form-group p_star">
+                <textarea type="text" name="{{ form.text.html_name }}" class="form-control"
+                      value = "{{ request.POST.text }}" placeholder="Дополнение к заказу" ></textarea>
+                  </div>
+
+              <div class="buttons pull-right">
+                <input  type="submit" class="btn btn-primary" value="Подтвердить/Оформить заказ" />
+              </div>
+            </form>
+          </div>
+          <div class="col-lg-4">
+
+
+            <div class="order_box">
+              <h2>Ваш заказ {{ item.id }}</h2>
+
+              <ul class="list">
+                <li>
+                  <a href="#">Продукт
+                    <span>Цена</span>
+                  </a>
+                </li>
+                {% for item in products_in_basket %}
+                <li>
+                  <a href="#">{{item.product}}
+                    <span class="middle">{{item.nmb}} шт.</span>
+                    <span class="last">{{item.price_per_item}} грн.</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+              <ul class="list list_2">
+                <li>
+                  <a href="#">К оплате
+                    <span>{{total_price}} грн.</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Checkout Area =================-->
+{% endblock %}
