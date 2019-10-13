@@ -44,9 +44,9 @@ def category_filter_sort(request):
         filters_higth = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Высота').values()
         filters_deep = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Глубина').values()
         filters_width = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Ширина').values()
-
-        cat = FilterCategory.objects.all().values()
-        pr = ProductFilter.objects.all().values('product','filter_category','values')
+        #
+        # cat = FilterCategory.objects.all().values()
+        # pr = ProductFilter.objects.all().values('product','filter_category','values')
         d = request.session.get('d')
         product= []
         prod= []
@@ -114,8 +114,8 @@ def category_filter_sort(request):
        filters_deep = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Глубина').values()
        filters_width = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Ширина').values()
 
-       cat = FilterCategory.objects.all().values()
-       pr = ProductFilter.objects.all().values('product','filter_category','values')
+       # cat = FilterCategory.objects.all().values()
+       # pr = ProductFilter.objects.all().values('product','filter_category','values')
        d = request.session.get('d')
        product= []
        prod= []
@@ -167,10 +167,9 @@ def category_filter(request):
      request.session['deep'] = deep
      width = request.POST.getlist("width")
      request.session['width'] = width
-     # print(height)
+
      if height:
          height = height[0]
-     # print(height)
      if deep:
          deep = deep[0]
      if width:
@@ -178,7 +177,6 @@ def category_filter(request):
      request.session['subcategory'] = data
      # достали price из сессии
      sort = request.session.get('sort')
-
      # достали slug из session
      slug = request.session.get('slug')
      categorys = Category.objects.get(slug = slug)
@@ -193,12 +191,7 @@ def category_filter(request):
      pr = ProductFilter.objects.all().values()
      print(pr)
      change_sort = ''
-     # categorys = Category.objects.get(slug = slug)
 
-     # prod = Product.objects.filter(is_active=True,  attributes = data)
-     # prod_id_filter_height = ProductFilter.objects.filter(filter_category = 'Высота', values = height).values()
-     # prod_id_filter_deep = ProductFilter.objects.filter(filter_category = 'Глубина', values = deep).values()
-     # prod_id_filter_width = ProductFilter.objects.filter(filter_category = 'Ширина', values = width).values()
      prod_filter = ProductFilter.objects.filter(Q(filter_category = 'Высота', values = height)|Q(filter_category = 'Глубина', values = deep)|Q(filter_category = 'Ширина', values = width)).values()
      print(1)
      print(prod_filter)
@@ -236,18 +229,15 @@ def category_filter(request):
 
      else:
         data_atr = data[0]
-
         prod = Product.objects.filter(is_active=True, attributes = data_atr).values()
         att = Attributs.objects.get(id = data_atr)
         product = list(prod)
      product = list(product)
      count = len(product)
-     max_price = ''
-     if product:
-      max_price = max(product,key=lambda x: x['price'])
-      max_price = max_price['price']
-
-
+     # max_price = ''
+     # if product:
+     #  max_price = max(product,key=lambda x: x['price'])
+     #  max_price = max_price['price']
      # сортировка
      if sort == '-price':
        product = sorted(product,key=lambda x: x['price'], reverse=True)
@@ -295,18 +285,15 @@ def category_filter(request):
 
      else:
         data_atr = data[0]
-
         prod = Product.objects.filter(is_active=True, attributes = data_atr).values()
         att = Attributs.objects.get(id = data_atr)
         product = list(prod)
      product = list(product)
      count = len(product)
-     max_price = ''
-     if product:
-      max_price = max(product,key=lambda x: x['price'])
-      max_price = max_price['price']
-
-
+     # max_price = ''
+     # if product:
+     #  max_price = max(product,key=lambda x: x['price'])
+     #  max_price = max_price['price']
      # сортировка
      if sort == '-price':
        product = sorted(product,key=lambda x: x['price'], reverse=True)
@@ -354,10 +341,10 @@ def category(request,slug):
      # подсчет продуктов
      product = list(prod)
      # максимальная и минимальная цена для фильтра
-     max_p = max(product,key=lambda x: x['price'])
-     max_p = max_p['price']
-     min_p = min(product,key=lambda x: x['price'])
-     min_p = min_p['price']
+     # max_p = max(product,key=lambda x: x['price'])
+     # max_p = max_p['price']
+     # min_p = min(product,key=lambda x: x['price'])
+     # min_p = min_p['price']
      # сортировка
      if sort == '-price':
       product = sorted(product,key=lambda x: x['price'], reverse=True)
@@ -387,10 +374,8 @@ def category(request,slug):
      filters_higth = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Высота').values()
      filters_deep = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Глубина').values()
      filters_width = FilterSelect.objects.filter(category_id = categorys,filter_category_id = 'Ширина').values()
-     cat = FilterCategory.objects.all().values()
-     pr = ProductFilter.objects.all().values('product','filter_category','values')
-
-
+     # cat = FilterCategory.objects.all().values()
+     # pr = ProductFilter.objects.all().values('product','filter_category','values')
      attributes = Attributs.objects.annotate(Count('product')).filter(category = categorys).values()
 
      product= []
@@ -398,12 +383,10 @@ def category(request,slug):
      # подсчет продуктов
      product = list(prod)
      # максимальная и минимальная цена для фильтра
-     max_p = max(product,key=lambda x: x['price'])
-     max_p = max_p['price']
-     min_p = min(product,key=lambda x: x['price'])
-     min_p = min_p['price']
-
-
+     # max_p = max(product,key=lambda x: x['price'])
+     # max_p = max_p['price']
+     # min_p = min(product,key=lambda x: x['price'])
+     # min_p = min_p['price']
      # сортировка
      if sort == '-price':
        product = sorted(product,key=lambda x: x['price'], reverse=True)
