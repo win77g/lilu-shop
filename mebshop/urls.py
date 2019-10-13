@@ -24,6 +24,7 @@ from orders.views import basket_adding,cart,basket_top,order,GeneratePDF
 from contact.views import contact
 from delivery.views import delivery
 from underorder.views import underorder
+from homepage.views import search
 from django.conf.urls import handler404
 
 import debug_toolbar
@@ -37,6 +38,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('',include('homepage.urls')),
+    path('homepage/search/',search),
     path('category/filter_sort/',category_filter_sort),
     path('category/filter/',category_filter),
     path('category/',include('products.urls')),
