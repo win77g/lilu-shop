@@ -167,11 +167,11 @@ USE_L10N = True
 USE_TZ = True
 
 # Отправка почты
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'sergik111'
-EMAIL_HOST_PASSWORD = '1tek-shop@mail.ru'
-EMAIL_PORT =  587
-EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'sergik111'
+# EMAIL_HOST_PASSWORD = '1tek-shop@mail.ru'
+# EMAIL_PORT =  587
+# EMAIL_USE_TLS = True
 # EMAIL_HOST_SSL = True
 
 
