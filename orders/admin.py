@@ -70,6 +70,18 @@ class Meta:
 # Register your models here.
 admin.site.register(ProductInBasket,ProductInBasketAdmin)
 
+
+class SubscibeAdmin (admin.ModelAdmin):
+   #  вывод всех полей в админку
+      list_display = [field.name for field in Subscribe._meta.fields]
+
+class Meta:
+    model = Subscribe
+# Register your models here.
+admin.site.register(Subscribe,SubscibeAdmin)
+
+
+
 class WishlistAdmin (admin.ModelAdmin):
    #  вывод всех полей в админку
       list_display = [field.name for field in Wishlist._meta.fields]

@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 # место где хронится пользователь
 from django.contrib.auth.models import User
 
-
+# ----------------------------------STATUS--------------------------------------------------------------
 class Status(models.Model):
     name = models.CharField(max_length=24,blank=True, null=True, default=None)
     is_active = models.BooleanField(default=True)
@@ -19,9 +19,9 @@ class Status(models.Model):
     class Meta:
         verbose_name = 'Статус заказа'
         verbose_name_plural = 'Статусы заказа'
+# ---------------------------------- END STATUS--------------------------------------------------------------
 
-
-# Create your models here.
+# ----------------------------------ORDRE--------------------------------------------------------------
 class Order(models.Model):
     user = models.ForeignKey(User,blank=True, null=True, default=None,on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10,decimal_places=2, default=0)#total price for all products in order
@@ -47,10 +47,10 @@ class Order(models.Model):
     def save(self, *args, **kwargs):
 
          super(Order, self).save(*args, **kwargs)
+# ----------------------------------END ORDRE--------------------------------------------------------------
 
+# ----------------------------------PRODUCT IN ORDRE--------------------------------------------------------------
 class ProductInOrder(models.Model):
-    # ссылк на заказ
-
     order = models.ForeignKey(Order,blank=True, null=True, default=None,on_delete=models.CASCADE)
     product = models.ForeignKey(Product, blank=True, null=True, default=None,on_delete=models.CASCADE)
     nmb = models.IntegerField(default=1)
@@ -98,7 +98,9 @@ def product_in_order_post_save(sender,instance,created,**kwargs):
    instance.order.total_price = order_total_price
    instance.order.save(force_update=True)
 post_save.connect(product_in_order_post_save, sender = ProductInOrder)
+# ----------------------------------END PRODUCT IN ORDRE----------------------------------------------------------
 
+# ----------------------------------PRODUCT IN BASKET----------------------------------------------------------
 class  ProductInBasket(models.Model):
     session_key = models.CharField(max_length=128,blank=True, null=True, default=None)
     image = models.CharField(max_length=128,blank=True, null=True, default=None)
@@ -128,6 +130,21 @@ class  ProductInBasket(models.Model):
         self.total_price = int(self.nmb) * self.price_per_item
 
         super(ProductInBasket, self).save(*args, **kwargs)
+# ----------------------------------END PRODUCT IN ORDRE----------------------------------------------------------
+
+#-----------------------------------subscribe---------------------------------------------------------------------
+class  Subscribe(models.Model):
+    email = models.EmailField(blank=True, null=True, default=None)
+    created = models.DateTimeField(auto_now_add=True,auto_now=False)
+
+    def __str__(self):
+        return "Подписка %s " % (self.id)
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Пдписчики'
+#-----------------------------------subscribe-------------------------------------------------------------
+
 
 class  Wishlist(models.Model):
     product = models.ForeignKey(Product, blank=True, null=True, default=None,on_delete=models.CASCADE)
